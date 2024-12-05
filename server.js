@@ -13,7 +13,7 @@ const pool = new Pool({
     user: "postgres",
     host: "127.0.0.1",
     database: "CSE412",
-    password: "xxx",
+    password: "Eunwoo1022",
     port: 8888,
 });
 
@@ -68,34 +68,73 @@ app.get("/api/products/filter", async (req, res) => {
     let query = "SELECT * FROM product WHERE 1=1";
     const values = [];
 
+    // Filters the product table to only include rows where the categoryid matches the provided categoryid
     if (categoryid) {
         values.push(categoryid);
         query += ` AND categoryid = $${values.length}`;
     }
+    // Filters the products based on the kitid
     if (kitid) {
         values.push(kitid);
-        query += ` AND kitid = $${values.length}`;
+        query += " AND categoryid IN (SELECT categoryid FROM categorized_by_kit WHERE kitid = $${values.length})";
     }
+    // Filters the products based on the typeid
     if (typeid) {
         values.push(typeid);
-        query += ` AND typeid = $${values.length}`;
+        query += " AND categoryid IN (SELECT categoryid FROM categorized_by_type WHERE typeid = $${values.length})";
     }
+    // Filters the products based on the weightid
     if (weightid) {
         values.push(weightid);
-        query += ` AND weightid = $${values.length}`;
+        query += " AND categoryid IN (SELECT categoryid FROM categorized_by_weightclass WHERE weightid = $${values.length})";
     }
 
     try {
         const result = await pool.query(query, values);
         res.json(result.rows);
     } catch (err) {
-        console.error(err.message);
+        console.error("Error executing query:", err.message);
         res.status(500).send("Server error");
+    }
+});
+
+// Insert product into Added_to table
+app.post("/api/cart/add", async (req, res) => {
+    const { productid, quantity } = req.body;
+
+    let cartid;
+
+    try {
+        // Generate a unique cartid
+        let isUnique = false;
+        while (!isUnique) {
+            cartid = Math.floor(Math.random() * 100000); // Generate a random cart ID
+            console.log(`Generated cartid: ${cartid}`);
+            const result = await pool.query("SELECT cartid FROM shoppinglist WHERE cartid = $1", [cartid]);
+            isUnique = result.rows.length === 0; // If no rows are returned, the cartid is unique
+        }
+
+        // Add the new cartid to the shoppinglist table
+        await pool.query("INSERT INTO shoppinglist (cartid, customername) VALUES ($1, $2)", [
+            cartid,
+            "Guest User", // need to chande
+        ]);
+
+        // Insert product into the added_to table
+        await pool.query(
+            "INSERT INTO added_to (productid, cartid, quantity) VALUES ($1, $2, $3)",
+            [productid, cartid, quantity]
+        );
+
+        res.status(200).json({ message: "Product added to cart successfully!", cartid });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Error adding product to cart");
     }
 });
 
 // Start the server
 const PORT = 5000;
 app.listen(PORT, () => {
-    console.log(`Backend running on http://localhost:${PORT}`);
+    console.log("Backend running on http://localhost:${PORT}");
 });

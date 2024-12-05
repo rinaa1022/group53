@@ -7,7 +7,9 @@ function App() {
     const [types, setTypes] = useState([]);
     const [weightClasses, setWeightClasses] = useState([]);
     const [products, setProducts] = useState([]);
+    const [selectedQuantity, setQuantities] = useState({}); // Object to track quantity by product ID
 
+    // Store the user-selected filters
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedKit, setSelectedKit] = useState("");
     const [selectedType, setSelectedType] = useState("");
@@ -21,7 +23,7 @@ function App() {
         axios.get("http://localhost:5000/api/weightclasses").then((res) => setWeightClasses(res.data));
     }, []);
 
-    // Fetch products dynamically based on selected filters
+    // Fetch products based on selected filters
     const fetchFilteredProducts = () => {
         const params = {
             categoryid: selectedCategory,
@@ -36,15 +38,29 @@ function App() {
             .catch((error) => console.error("Error fetching filtered products:", error));
     };
 
-    // Handle changes for each filter
+    // Update the state variables based on the user's selection
     const handleCategoryChange = (e) => setSelectedCategory(e.target.value);
     const handleKitChange = (e) => setSelectedKit(e.target.value);
     const handleTypeChange = (e) => setSelectedType(e.target.value);
     const handleWeightClassChange = (e) => setSelectedWeightClass(e.target.value);
 
+    const handleAddToCart = (productid) => {
+      const quantity = selectedQuantity[productid] || 1; // Default quantity is 1
+  
+      axios
+          .post("http://localhost:5000/api/cart/add", { productid, quantity })
+          .then((res) => {
+              alert("Product added to cart successfully!");
+          })
+          .catch((err) => {
+              console.error("Error adding product to cart:", err);
+              alert("Failed to add product to cart");
+          });
+    };  
+    
     return (
         <div style={{ padding: "20px" }}>
-            <h1>Product Filters</h1>
+            <h1>Welcome to our Retail Store for Robotics Parts!</h1>
 
             {/* Filter Section */}
             <div style={{ marginBottom: "20px", display: "flex", flexWrap: "wrap", gap: "20px" }}>
@@ -114,21 +130,45 @@ function App() {
                     <table border="1" style={{ width: "100%", textAlign: "left" }}>
                         <thead>
                             <tr>
+                              <th> Add to Cart</th>
                               <th>Product ID</th>
                               <th>Product Name</th>
                               <th>Description</th>
-                              <th>Price</th>
+                              <th>Price ($)</th>
                               <th>Is on Sale</th>
-                              <th>Rating</th>
+                              <th>Rating (5.0)</th>
                               <th>Number of Reviews</th>
-                              <th>Weight</th>
+                              <th>Weight (g)</th>
                               <th>Stock</th>
-
                             </tr>
                         </thead>
                         <tbody>
                             {products.map((product) => (
                                 <tr key={product.productid}>
+                                    <td>
+                                        {/* Quantity input */}
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            value={selectedQuantity[product.productid] || 1}
+                                            style={{ width: "60px", marginRight: "10px" }}
+                                            onChange={(e) => setQuantities({ ...selectedQuantity, [product.productid]: e.target.value })}
+                                        />
+                                        {/* Add to Cart Button */}
+                                        <button
+                                            onClick={() => handleAddToCart(product.productid)}
+                                            style={{
+                                                padding: "10px 20px",
+                                                backgroundColor: "#007bff",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "3px",
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            Add
+                                        </button>
+                                    </td>
                                     <td>{product.productid}</td>
                                     <td>{product.productname}</td>
                                     <td>{product.description}</td>
