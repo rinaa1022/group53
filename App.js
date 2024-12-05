@@ -48,7 +48,7 @@ function App() {
 
             {/* Filter Section */}
             <div style={{ marginBottom: "20px", display: "flex", flexWrap: "wrap", gap: "20px" }}>
-                <label style={{ display: "flex", flexDirection: "column" }}>
+                <label>
                     <span>Category:</span>
                     <select onChange={handleCategoryChange} value={selectedCategory}>
                         <option value="">All</option>
