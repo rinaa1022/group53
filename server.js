@@ -13,7 +13,7 @@ const pool = new Pool({
     user: "postgres",
     host: "127.0.0.1",
     database: "CSE412",
-    password: "xxx",
+    password: "Eunwoo1022",
     port: 8888,
 });
 
@@ -98,37 +98,41 @@ app.get("/api/products/filter", async (req, res) => {
     }
 });
 
-// Insert product into Added_to table
-app.post("/api/cart/add", async (req, res) => {
-    const { productid, quantity } = req.body;
-
+// Insert cart id and customer name into shoppinglist table
+app.post("/api/shoppinglist/add", async (req, res) => {
+    const { customerName } = req.body;
     let cartid;
 
     try {
-        // Generate a unique cartid
         let isUnique = false;
         while (!isUnique) {
-            cartid = Math.floor(Math.random() * 100000); // Generate a random cart ID
-            console.log(`Generated cartid: ${cartid}`);
+            cartid = Math.floor(Math.random() * 100000); // Generate random cart ID
             const result = await pool.query("SELECT cartid FROM shoppinglist WHERE cartid = $1", [cartid]);
-            isUnique = result.rows.length === 0; // If no rows are returned, the cartid is unique
+            isUnique = result.rows.length === 0; // Ensure uniqueness
         }
 
-        // Add the new cartid to the shoppinglist table
         await pool.query("INSERT INTO shoppinglist (cartid, customername) VALUES ($1, $2)", [
             cartid,
-            "Guest User", // need to chande
+            customerName,
         ]);
 
-        // Insert product into the added_to table
-        await pool.query(
-            "INSERT INTO added_to (productid, cartid, quantity) VALUES ($1, $2, $3)",
-            [productid, cartid, quantity]
-        );
-
-        res.status(200).json({ message: "Product added to cart successfully!", cartid });
+        res.status(200).json({ cartid }); // send cartid to frontend
     } catch (err) {
-        console.error(err.message);
+        console.error("Error creating shopping list:", err.message);
+        res.status(500).send("Error creating shopping list");
+    }
+});
+
+// Insert product into Added_to table
+app.post("/api/cart/add", async (req, res) => {
+    const { productid, quantity, cartid } = req.body;
+
+    try {
+        await pool.query("INSERT INTO added_to (productid, cartid, quantity) VALUES ($1, $2, $3)", [productid, cartid, quantity]);
+
+        res.status(200).send("Product added to cart successfully!");
+    } catch (err) {
+        console.error("Error adding product to cart:", err.message);
         res.status(500).send("Error adding product to cart");
     }
 });

@@ -8,6 +8,9 @@ function App() {
     const [weightClasses, setWeightClasses] = useState([]);
     const [products, setProducts] = useState([]);
     const [selectedQuantity, setQuantities] = useState({}); // Object to track quantity by product ID
+    const [customerName, setCustomerName] = useState(""); // Store customer name
+    const [cartId, setCartId] = useState(null); // Store the generated cart ID
+    const [showNamePrompt, setShowNamePrompt] = useState(true); // Always ask for name
 
     // Store the user-selected filters
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -44,14 +47,38 @@ function App() {
     const handleTypeChange = (e) => setSelectedType(e.target.value);
     const handleWeightClassChange = (e) => setSelectedWeightClass(e.target.value);
 
+    // Handle name submission and cart creation
+    const handleNameSubmit = () => {
+      if (!customerName.trim()) {
+          alert("Please enter a valid name");
+          return;
+      }
+
+      // Create a new cart with the entered name
+      axios
+          .post("http://localhost:5000/api/shoppinglist/add", { customerName })
+          .then((res) => {
+              setCartId(res.data.cartid); // Save cart ID in the frontend's state
+              setShowNamePrompt(false); // Hide the name prompt
+          })
+          .catch((err) => {
+              console.error("Error creating cart:", err);
+              alert("Failed to create your cart. Please try again.");
+          });
+    };
+
+    // Handle adding products to cart
     const handleAddToCart = (productid) => {
+      if (!cartId) {
+        alert("You need to create a cart first. Please enter your name.");
+        return;
+      }
+
       const quantity = selectedQuantity[productid] || 1; // Default quantity is 1
   
       axios
-          .post("http://localhost:5000/api/cart/add", { productid, quantity })
-          .then((res) => {
-              alert("Product added to cart successfully!");
-          })
+          .post("http://localhost:5000/api/cart/add", { productid, quantity, cartid: cartId })
+          .then((res) => {alert("Product added to cart successfully!");})
           .catch((err) => {
               console.error("Error adding product to cart:", err);
               alert("Failed to add product to cart");
@@ -112,16 +139,48 @@ function App() {
                 <button
                     onClick={fetchFilteredProducts}
                     style={{
-                        padding: "10px 20px",
+                        padding: "5px 5px",
                         backgroundColor: "#007bff",
                         color: "white",
                         border: "none",
-                        borderRadius: "5px",
+                        borderRadius: "1px",
                         cursor: "pointer",
                     }}
                 >
                     Apply Filters
                 </button>
+
+                {showNamePrompt ? (
+                    <div style={{ textAlign: "center", marginTop: "20px" }}>
+                        <h1>Welcome!</h1>
+                        <p>Please enter your name to get started:</p>
+                        <input
+                            type="text"
+                            value={customerName}
+                            onChange={(e) => setCustomerName(e.target.value)}
+                            placeholder="Enter your name"
+                            style={{ padding: "10px", margin: "10px" }}
+                        />
+                        <button
+                            onClick={handleNameSubmit}
+                            style={{
+                                padding: "10px 20px",
+                                backgroundColor: "#007bff",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "5px",
+                                cursor: "pointer",
+                            }}
+                        >
+                            Start Shopping
+                        </button>
+                    </div>
+                ) : (
+                    <>
+                        <h1>Welcome, {customerName}!</h1>
+                        <p>Your current cart ID is: {cartId}</p>
+                    </>
+                )}
             </div>
 
             {/* Product Table */}
@@ -151,14 +210,14 @@ function App() {
                                             type="number"
                                             min="1"
                                             value={selectedQuantity[product.productid] || 1}
-                                            style={{ width: "60px", marginRight: "10px" }}
+                                            style={{ width: "50px", textAlign: "center", marginLeft: "8px", marginBottom: "8px"}}
                                             onChange={(e) => setQuantities({ ...selectedQuantity, [product.productid]: e.target.value })}
                                         />
                                         {/* Add to Cart Button */}
                                         <button
                                             onClick={() => handleAddToCart(product.productid)}
                                             style={{
-                                                padding: "10px 20px",
+                                                padding: "10px 15px",
                                                 backgroundColor: "#007bff",
                                                 color: "white",
                                                 border: "none",
