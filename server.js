@@ -76,17 +76,17 @@ app.get("/api/products/filter", async (req, res) => {
     // Filters the products based on the kitid
     if (kitid) {
         values.push(kitid);
-        query += " AND categoryid IN (SELECT categoryid FROM categorized_by_kit WHERE kitid = $${values.length})";
+        query += ` AND categoryid IN (SELECT categoryid FROM categorized_by_kit WHERE kitid = $${values.length})`;
     }
     // Filters the products based on the typeid
     if (typeid) {
         values.push(typeid);
-        query += " AND categoryid IN (SELECT categoryid FROM categorized_by_type WHERE typeid = $${values.length})";
+        query += ` AND categoryid IN (SELECT categoryid FROM categorized_by_type WHERE typeid = $${values.length})`;
     }
     // Filters the products based on the weightid
     if (weightid) {
         values.push(weightid);
-        query += " AND categoryid IN (SELECT categoryid FROM categorized_by_weightclass WHERE weightid = $${values.length})";
+        query += ` AND categoryid IN (SELECT categoryid FROM categorized_by_weightclass WHERE weightid = $${values.length})`;
     }
 
     try {

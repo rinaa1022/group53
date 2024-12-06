@@ -139,11 +139,11 @@ function App() {
                 <button
                     onClick={fetchFilteredProducts}
                     style={{
-                        padding: "5px 5px",
+                        padding: "10px 20px",
                         backgroundColor: "#007bff",
                         color: "white",
                         border: "none",
-                        borderRadius: "1px",
+                        borderRadius: "5px",
                         cursor: "pointer",
                     }}
                 >
