@@ -49,4 +49,4 @@
 ### How to Add the Tables to PostgreSQL
 1. Open PostgreSQL
 2. Open the Query Tool
-3. Copy and paste the Datadump.txt into the Query Tool
+3. Copy and paste the provided Datadump.txt into the Query Tool
