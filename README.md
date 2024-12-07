@@ -9,24 +9,24 @@
 - Visit [Node.js website](https://nodejs.org/en) and install Node.js.
   
 ### Step2: Set Up the Backend
-        1. Create a folder for your backend: <br />
-          a. mkdir backend <br />
-          b. cd backend <br />
-        2. Initialize the project: <br />
-          a. npm init -y <br />
-        3. Install required packages: <br />
-          a. npm install express mysql cors body-parser <br />
-        4. Create a server.js file in the backend folder and Replace the content of server.js with the provided server.js: <br />
-          a.touch server.js <br />
+        1. Create a folder for your backend:
+          a. mkdir backend
+          b. cd backend
+        2. Initialize the project:
+          a. npm init -y
+        3. Install required packages:
+          a. npm install express mysql cors body-parser
+        4. Create a server.js file in the backend folder and Replace the content of server.js with the provided server.js:
+          a.touch server.js
 ### Step3: Set Up the React Frontend
-        1. Create a React app: <br />
-          a. npx create-react-app group53-app <br />
-          b. cd group53-app <br />
-        3. Install Axios for API requests: <br />
-          a. npm install axios <br />
-        4. Replace the content of App.js in the group53-app folder with the provided App.js <br />
+        1. Create a React app:
+          a. npx create-react-app group53-app
+          b. cd group53-app 
+        3. Install Axios for API requests:
+          a. npm install axios
+        4. Replace the content of App.js in the group53-app folder with the provided App.js
 ### Step4:
-      1. Update server.js like following: <br />
+      1. Update server.js like following:
     
           const pool = new Pool({
               user: "postgres",
@@ -37,11 +37,11 @@
           });
 
 ### Step5:
-    1. Start the backend server: <br />
-        a. cd backend <br />
-        b. node server.js <br />
-    2. Start the React app: <br />
-        a. cd group53-app <br />
-        b. npm start <br />
+    1. Start the backend server:
+        a. cd backend
+        b. node server.js
+    2. Start the React app:
+        a. cd group53-app
+        b. npm start
     
           
