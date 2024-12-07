@@ -10,7 +10,7 @@
   
 ### Step2: Set Up the Backend
 1. Create a folder for your backend: </br>
-  `a. mkdir backend`
+  `a. mkdir backend` </br>
   `b. cd backend`
 2. Initialize the project: </br>
   `a. npm init -y`
@@ -21,7 +21,7 @@
 
 ### Step3: Set Up the React Frontend
 1. Create a React app: </br>
-  `a. npx create-react-app group53-app`
+  `a. npx create-react-app group53-app` </br>
   `b. cd group53-app`
 3. Install Axios for API requests: </br>
   `a. npm install axios`
@@ -30,13 +30,13 @@
 ### Step4: Update server.js
 1. Update the server.js configuration as follows:
     
-      const pool = new Pool({
+      `const pool = new Pool({
         user: "postgres",
         host: "127.0.0.1",
         database: "CSE412",
         password: "xxx",
         port: 8888,
-      });
+      });`
 
 ### Step5: Start Servers
 1. Start the backend server: </br>
