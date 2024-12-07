@@ -11,6 +11,8 @@ function App() {
     const [customerName, setCustomerName] = useState(""); // Store customer name
     const [cartId, setCartId] = useState(null); // Store the generated cart ID
     const [showNamePrompt, setShowNamePrompt] = useState(true); // Always ask for name
+    const [shoppingCart, setShoppingCart] = useState([]); // Store shopping cart items
+    const [showCart, setShowCart] = useState(false); // Toggle cart modal visibility
 
     // Store the user-selected filters
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -85,6 +87,25 @@ function App() {
           });
     };  
     
+    // Fetch shopping cart details
+    const fetchShoppingCart = () => {
+        if (!cartId) {
+            alert("No cart ID found. Please start shopping first.");
+            return;
+        }
+
+        axios
+            .get(`http://localhost:5000/api/cart/${cartId}`)
+            .then((res) => {
+                setShoppingCart(res.data); // Set the fetched cart items
+                setShowCart(true); // Show the cart modal
+            })
+            .catch((err) => {
+                console.error("Error fetching shopping cart:", err.message);
+                alert("Failed to fetch shopping cart.");
+            });
+    };
+
     return (
         <div style={{ padding: "20px" }}>
             <h1>Welcome to our Retail Store for Robotics Parts!</h1>
@@ -149,7 +170,83 @@ function App() {
                 >
                     Apply Filters
                 </button>
+                
+                {/* View Shopping Cart Button */}
+                <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+                    <button
+                        onClick={fetchShoppingCart}
+                        style={{
+                            padding: "10px 20px",
+                            backgroundColor: "#28a745",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                        }}
+                    >
+                        View Shopping Cart
+                    </button>
+                </div>
 
+                {/* Shopping Cart Modal */}
+                {showCart && (
+                    <div
+                        style={{
+                            position: "fixed",
+                            top: "20%",
+                            left: "50%",
+                            transform: "translate(-50%, -20%)",
+                            backgroundColor: "white",
+                            padding: "20px",
+                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                            zIndex: 1000,
+                        }}
+                    >
+                        <h2>Your Shopping Cart</h2>
+                        {shoppingCart.length > 0 ? (
+                            <table border="1" style={{ width: "100%", textAlign: "left" }}>
+                                <thead>
+                                    <tr>
+                                        <th>Product ID</th>
+                                        <th>Product Name</th>
+                                        <th>Description</th>
+                                        <th>Price ($)</th>
+                                        <th>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {shoppingCart.map((item) => (
+                                        <tr key={item.productid}>
+                                            <td>{item.productid}</td>
+                                            <td>{item.productname}</td>
+                                            <td>{item.description}</td>
+                                            <td>{item.price}</td>
+                                            <td>{item.quantity}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <p>Your shopping cart is empty.</p>
+                        )}
+                        <button
+                            onClick={() => setShowCart(false)}
+                            style={{
+                                marginTop: "20px",
+                                padding: "10px 20px",
+                                backgroundColor: "#dc3545",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "5px",
+                                cursor: "pointer",
+                            }}
+                        >
+                            Close
+                        </button>
+                    </div>
+                )}
+                
+                {/* Name Prompt Section */}
                 {showNamePrompt ? (
                     <div style={{ textAlign: "center", marginTop: "20px" }}>
                         <h1>Welcome!</h1>
@@ -189,7 +286,7 @@ function App() {
                     <table border="1" style={{ width: "100%", textAlign: "left" }}>
                         <thead>
                             <tr>
-                              <th> Add to Cart</th>
+                              <th>Add to Cart</th>
                               <th>Product ID</th>
                               <th>Product Name</th>
                               <th>Description</th>

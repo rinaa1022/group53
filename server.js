@@ -65,7 +65,7 @@ app.get("/api/weightclasses", async (req, res) => {
 // Fetch products by filters
 app.get("/api/products/filter", async (req, res) => {
     const { categoryid, kitid, typeid, weightid } = req.query;
-    let query = "SELECT * FROM product WHERE 1=1";
+    let query = "SELECT DISTINCT ON (productname) * FROM product WHERE 1=1";
     const values = [];
 
     // Filters the product table to only include rows where the categoryid matches the provided categoryid
@@ -134,6 +134,30 @@ app.post("/api/cart/add", async (req, res) => {
     } catch (err) {
         console.error("Error adding product to cart:", err.message);
         res.status(500).send("Error adding product to cart");
+    }
+});
+
+// Fetch shopping cart details by cartid
+app.get("/api/cart/:cartid", async (req, res) => {
+    const { cartid } = req.params;
+
+    try {
+        const query = `
+            SELECT product.productname, added_to.quantity 
+            FROM added_to
+            JOIN product on added_to.productid = product.productid
+            WHERE cartid = $1;
+        `;
+        const result = await pool.query(query, [cartid]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).send("No items found in the shopping cart.");
+        }
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Error fetching shopping cart:", err.message);
+        res.status(500).send("Error fetching shopping cart");
     }
 });
 
