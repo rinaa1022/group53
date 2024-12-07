@@ -28,7 +28,7 @@
 4. Replace the content of App.js in the group53-app folder with the provided App.js </br>
 
 ### Step 4: Update server.js
-1. Update the server.js configuration with your datas:
+1. Update the server.js configuration with your information:
     
         const pool = new Pool({
           user: "postgres",
