@@ -25,8 +25,8 @@
         3. Install Axios for API requests:
           a. npm install axios
         4. Replace the content of App.js in the group53-app folder with the provided App.js
-### Step4:
-      1. Update server.js like following:
+### Step4: Update server.js
+      1. Update the server.js configuration as follows:
     
           const pool = new Pool({
               user: "postgres",
@@ -36,7 +36,7 @@
               port: 8888,
           });
 
-### Step5:
+### Step5: Start Servers
     1. Start the backend server:
         a. cd backend
         b. node server.js
