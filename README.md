@@ -4,9 +4,9 @@ Set Up Your Environment
 - Frontend: React.js
 - Backend: Node.js with Express.js
 - Database: PostgreSQL
-
-Step1: Install Node.js on website https://nodejs.org/en
-Step2: Set Up the Backend
+<pre>
+Step1: Install Node.js on website https://nodejs.org/en <pre>
+Step2: Set Up the Backend <pre>
         1. Create a folder for your backend:
           a. mkdir backend
           b. cd backend
