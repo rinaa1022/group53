@@ -51,10 +51,10 @@
 2. Open the Query Tool
 3. Copy and paste the SQL script into the Query Tool:
 
--- Table for Category
-CREATE TABLE Category (
-    CategoryID INT PRIMARY KEY,
-    categoryName VARCHAR(255) NOT NULL
+-- Table for Category  </br>
+CREATE TABLE Category (  </br>
+    CategoryID INT PRIMARY KEY,  </br>
+    categoryName VARCHAR(255) NOT NULL  </br>
 );
 
 -- Table for Kit
