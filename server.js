@@ -13,7 +13,7 @@ const pool = new Pool({
     user: "postgres",
     host: "127.0.0.1",
     database: "CSE412",
-    password: "xxx",
+    password: "Eunwoo1022",
     port: 8888,
 });
 
@@ -143,7 +143,7 @@ app.get("/api/cart/:cartid", async (req, res) => {
 
     try {
         const query = `
-            SELECT product.productname, added_to.quantity 
+            SELECT product.productid, product.productname, product.description, product.price, added_to.quantity
             FROM added_to
             JOIN product on added_to.productid = product.productid
             WHERE cartid = $1;
