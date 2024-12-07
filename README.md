@@ -10,8 +10,8 @@
   
 ### Step2: Set Up the Backend
 1. Create a folder for your backend: </br>
-      `a. mkdir backend` </br>
-      `b. cd backend`
+        a. mkdir backend </br>
+        b. cd backend
 2. Initialize the project: </br>
       `a. npm init -y`
 3. Install required packages: </br>
