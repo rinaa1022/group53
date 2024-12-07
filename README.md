@@ -9,9 +9,9 @@
 - Visit [Node.js website](https://nodejs.org/en) and install Node.js.
   
 ### Step2: Set Up the Backend
-        1. Create a folder for your backend: </br>
-          `a. mkdir backend`
-          `b. cd backend`
+1. Create a folder for your backend: </br>
+  `a. mkdir backend`
+  `b. cd backend`
         2. Initialize the project: </br>
           `a. npm init -y`
         3. Install required packages: </br>
