@@ -30,13 +30,13 @@
 ### Step4: Update server.js
 1. Update the server.js configuration as follows:
     
-  const pool = new Pool({
-    user: "postgres",
-    host: "127.0.0.1",
-    database: "CSE412",
-    password: "xxx",
-    port: 8888,
-  });
+      const pool = new Pool({
+        user: "postgres",
+        host: "127.0.0.1",
+        database: "CSE412",
+        password: "xxx",
+        port: 8888,
+      });
 
 ### Step5: Start Servers
 1. Start the backend server: </br>
