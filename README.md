@@ -8,7 +8,7 @@
 ### Step 1: Install Node.js
 - Visit [Node.js website](https://nodejs.org/en) and install Node.js.
   
-### Step2: Set Up the Backend
+### Step 2: Set Up the Backend
 1. Create a folder for your backend: </br>
         `a. mkdir backend` </br>
         `b. cd backend`
@@ -19,7 +19,7 @@
 4. Create a server.js file in the backend folder and Replace the content of server.js with the provided server.js: </br>
       `a.touch server.js`
 
-### Step3: Set Up the React Frontend
+### Step 3: Set Up the React Frontend
 1. Create a React app: </br>
       `a. npx create-react-app group53-app` </br>
       `b. cd group53-app`
@@ -27,7 +27,7 @@
       `a. npm install axios`
 4. Replace the content of App.js in the group53-app folder with the provided App.js </br>
 
-### Step4: Update server.js
+### Step 4: Update server.js
 1. Update the server.js configuration with your datas:
     
         const pool = new Pool({
@@ -38,7 +38,7 @@
           port: 8888,
         });
 
-### Step5: Start Servers
+### Step 5: Start Servers
 1. Start the backend server: </br>
       `a. cd backend` </br>
       `b. node server.js`
